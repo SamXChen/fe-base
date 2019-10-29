@@ -1,21 +1,31 @@
 function customCall(target, ...args) {
-    const tmpFnName = '__custom_call_fn__';
     const fn = this;
+    const tmpFnName = '__custom_call_fn__name__';
 
     if(target === undefined || target === null) {
-        return fn(...args);
+        try {
+            target = window;
+        } catch(err) {
+            return fn(...args);
+        }
+    }
+
+    // search object proto
+    let proto = target;
+    while(typeof proto !== 'object') {
+        proto = proto.__proto__;
     }
     
-    target.__proto__[tmpFnName] = fn;
+    proto[tmpFnName] = fn;
     const result = target[tmpFnName](...args);
-    delete target.__proto__[tmpFnName];
+    delete proto[tmpFnName];
 
     return result;
 }
 
 
 function wrap() {
-    Function.prototype.customCall = customCall;
+    Function.prototype.customCall = Function.prototype.customCall || customCall;
 }
 
 module.exports = {

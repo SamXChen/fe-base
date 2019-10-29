@@ -15,7 +15,6 @@ function customBind(target, ...args) {
     target.__proto__[fnName] = fn;
 
     return function(...args2) {
-
         return target[fnName](...args, ...args2);
     }
 }
