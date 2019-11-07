@@ -11,16 +11,22 @@ function customApply(target, args) {
     }
 
     // search object proto
+    // number 等类型无法直接添加属性（函数）上去
     let proto = target;
     while(typeof proto !== 'object') {
         proto = proto.__proto__;
     }
 
     proto[tmpFnName] = fn;
-    const result = target[tmpFnName](...args);
-    delete proto[tmpFnName];
 
-    return result;
+    try {
+        const result = target[tmpFnName](...args);
+        delete proto[tmpFnName];
+        return result;
+    } catch(err) {
+        delete proto[tmpFnName];
+        throw err;
+    }
 }
 
 function wrap() {
