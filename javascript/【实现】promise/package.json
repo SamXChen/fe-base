@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "node ./test.js"
+    "test": "node ./test.mocha.js"
   },
   "dependencies": {
     "promises-aplus-tests": "^2.1.2"
