@@ -22,7 +22,7 @@ describe('throttle function test suites', () => {
             for(let idx = 0; idx < total; idx++) {
                 setTimeout(() => {
                     throttledFn(idx)
-                }, delay)
+                }, delay + idx * 10)
             }
             
             await new Promise(resolve => {
@@ -31,7 +31,7 @@ describe('throttle function test suites', () => {
         }
 
         await frequentlyCalledFunction()
-
+        
         expect(console.log.mock.calls.length).toBeGreaterThan(0)
         expect(console.log.mock.calls.length).toBeLessThan(total / 20)
     })
