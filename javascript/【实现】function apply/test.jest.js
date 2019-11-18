@@ -48,26 +48,33 @@ describe('apply function test suites', () => {
     
     test('applied by "objB"', () => {
         toConsoleArray.customApply(objB, testArr)
+        expect(console.log).toHaveBeenCalledWith("name: ", objB.name)
+        expect(console.log).toHaveBeenCalledWith(...testArr)
     })
     
     test('applied by number', () => {
         toConsoleArray.customApply(0, testArr)
+        expect(console.log).toHaveBeenCalledWith(...testArr)
     })
     
     test('applied by NaN', () => {
         toConsoleArray.customApply(NaN, testArr)
+        expect(console.log).toHaveBeenCalledWith(...testArr)
     })
     
     test('applied by string', () => {
         toConsoleArray.customApply('123', testArr)
+        expect(console.log).toHaveBeenCalledWith(...testArr)
     })
     
     test('applied by boolean', () => {
         toConsoleArray.customApply(true, testArr)
+        expect(console.log).toHaveBeenCalledWith(...testArr)
     })
     
     test('applied by arrow fn', () => {
         toConsoleArray.customApply(() => {}, testArr)
+        expect(console.log).toHaveBeenCalledWith(...testArr)
     })
 })
 
