@@ -1,12 +1,8 @@
 const htmlEncoder = require('../common/html-encode')
 
-const tmpl = (str, data) => {
-    if(!/[\s\W]/g.test(str)) {
-        tpl = document.getElementById(str).innerHTML
-    } else {
-        tpl = str
-    }
+const cache = new Map()
 
+const buildFn = (argKeys, tpl) => {
     let result = `let p = []; p.push('`
     result += `${
         tpl.replace(/[\r\n\t]/g, '')
@@ -19,6 +15,13 @@ const tmpl = (str, data) => {
     }`
     result += "'); return p.join('');"
 
+    return new Function(...argKeys, result)
+}
+
+const render = (str, data) => {
+
+    const tpl = str
+
     const argVals = []
     const argKeys = []
     for(let key in data) {
@@ -29,9 +32,21 @@ const tmpl = (str, data) => {
     argKeys.push('htmlEncode')
     argVals.push(htmlEncoder.htmlEncode)
 
-    const fn = new Function(...argKeys, result)
-    const resultStr = fn.apply({}, argVals)
-    return resultStr
+    let fn
+
+    const fnKeyArr = [...argKeys, tpl]
+    const fnKey = fnKeyArr.join('')
+    
+    if(cache.has(fnKey)) {
+        fn = cache.get(fnKey)
+    }else {
+        fn = buildFn(argKeys, tpl)
+        cache.set(fnKey, fn)
+    }
+
+    const result = fn.apply({}, argVals)
+    return result
 }
 
-module.exports = tmpl
+module.exports = render
+module.exports.cache = cache 

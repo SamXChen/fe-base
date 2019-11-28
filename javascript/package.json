@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "deep-diff": "^1.0.2",
+    "htmlparser": "^1.7.7",
     "jest": "^24.9.0"
   },
   "scripts": {
