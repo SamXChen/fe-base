@@ -1,5 +1,5 @@
 const Compiler = require('./compiler')
-const defaults = require('./defaults') //todo
+const defaults = require('./defaults')
 const TemplateError = require('./error.js')
 
 const debugRender = (error, options) => {

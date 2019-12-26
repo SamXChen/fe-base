@@ -1,5 +1,5 @@
 const esTokenizer = require('./es-tokenizer')
-const tplTokenizer = require('./tpl-tokenizer') //todo
+const tplTokenizer = require('./tpl-tokenizer')
 
 // 传递给模板的数据引用
 const DATA = `$data`

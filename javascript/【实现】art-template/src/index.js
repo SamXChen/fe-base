@@ -1,6 +1,6 @@
 const render = require('./render')
 const compile = require('./compile')
-// const defaults = require('./defaults') //todo
+const defaults = require('./defaults')
 
 const template = (filename, content) => {
     let res
