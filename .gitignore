@@ -2,3 +2,6 @@
 .vscode
 node_modules
 coverage
+
+## c 项目的 build 文件
+impl-js-runtime/build

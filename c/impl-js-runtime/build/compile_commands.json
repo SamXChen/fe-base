@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/Users/sam/Documents/github/fe-base/c/impl-js-runtime/build",
+  "command": "/usr/bin/clang  -I/Users/sam/Documents/github/fe-base/c/impl-js-runtime/../quickjs -I/Users/sam/Documents/github/fe-base/c/impl-js-runtime/../libuv/heads  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -o CMakeFiles/runtime.dir/main.c.o   -c /Users/sam/Documents/github/fe-base/c/impl-js-runtime/main.c",
+  "file": "/Users/sam/Documents/github/fe-base/c/impl-js-runtime/main.c"
+},
+{
+  "directory": "/Users/sam/Documents/github/fe-base/c/impl-js-runtime/build",
+  "command": "/usr/bin/clang  -I/Users/sam/Documents/github/fe-base/c/impl-js-runtime/../quickjs -I/Users/sam/Documents/github/fe-base/c/impl-js-runtime/../libuv/heads  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -o CMakeFiles/runtime.dir/timer.c.o   -c /Users/sam/Documents/github/fe-base/c/impl-js-runtime/timer.c",
+  "file": "/Users/sam/Documents/github/fe-base/c/impl-js-runtime/timer.c"
+}
+]

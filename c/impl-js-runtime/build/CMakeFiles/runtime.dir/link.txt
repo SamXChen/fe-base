@@ -1,0 +1,1 @@
+/usr/bin/clang -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wl,-headerpad_max_install_names  CMakeFiles/runtime.dir/main.c.o CMakeFiles/runtime.dir/timer.c.o  -o runtime ../../libuv/out/cmake/libuv_a.a ../../quickjs/libquickjs.a 
