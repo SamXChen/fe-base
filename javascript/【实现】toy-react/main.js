@@ -7,11 +7,27 @@
 import { createElement, Component, render } from './src'
 
 class MyComponent extends Component {
+
+    constructor() {
+        super()
+        this.state = {
+            a: 1,
+            b: 2,
+        }
+    }
+
+    add = () => {
+        this.state.a++
+        this.rerender()
+    }
+
     render() {
         return (
             <div>
                 <div>text</div>
+                <div>{ this.state.a.toString() }</div>
                 { this.children }
+                <button onClick={ this.add }>add</button>
             </div>
         )
     }
