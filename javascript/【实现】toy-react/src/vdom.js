@@ -3,6 +3,7 @@ import { RENDER_TO_DOM } from './consts'
 export class Vdom {
     constructor() {
         this.props = Object.create(null)
+        this.children = []
         this.$vchildren = []
         this.$range = null
     }
@@ -10,7 +11,7 @@ export class Vdom {
         this.props[name] = value
     }
     appendChild(component) {
-        this.$vchildren.push(component.renderVdom())
+        this.children.push(component)
     }
     renderVdom() {
         return this
@@ -18,7 +19,7 @@ export class Vdom {
     [RENDER_TO_DOM]() {
         throw new Error(`Pure Vdom shouldn't be rendered to DOM`)
     }
-    replaceConent() {
+    replaceContent() {
         if (this.$range === null) {
             return
         }

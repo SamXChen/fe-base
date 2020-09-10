@@ -21,6 +21,9 @@ class Board extends Component {
 
     constructor(props) {
         super(props)
+        this.state = {
+            count: 0,
+        }
     }
 
     renderSquare(i) {
@@ -33,8 +36,20 @@ class Board extends Component {
     }
 
     render() {
+        const { count } = this.state
+        console.log('------------------------')
+        console.log(JSON.stringify(this.props))
+        console.log(JSON.stringify(this.state))
+        
         return (
-            <div>
+            <div onClick={ 
+                () => { 
+                    console.log(JSON.stringify(this.props))
+                    console.log(JSON.stringify(this.state))
+                    // this.setState({ count: count + 1 }) 
+                }}
+            >
+                <div>{ count }</div>
                 <div className='board-row'>
                     { this.renderSquare(0) }
                     { this.renderSquare(1) }

@@ -20,9 +20,12 @@ export function createElement(type, attributes, ...children) {
 }
 
 export function render(vdom, parentEl) {
-    if (vdom === null || !vdom[RENDER_TO_DOM]) {
+    if (vdom === null || !vdom.renderVdom || !vdom[RENDER_TO_DOM]) {
         return
     }
+    // 重要：更新 vdom 的 vchildren
+    vdom.renderVdom()
+
     const range = document.createRange()
     range.setStart(parentEl, parentEl.childNodes.length)
     range.setEnd(parentEl, parentEl.childNodes.length)
@@ -35,7 +38,7 @@ function inserChildren(vdom, children) {
         if (child === null) {
             continue
         }
-        if (typeof child === 'string') {
+        if (typeof child === 'string' || typeof child === 'number') {
             child = new TextWrapper(child)
         }
         if (typeof child === 'object' && child instanceof Array) {

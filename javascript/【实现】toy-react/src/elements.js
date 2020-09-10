@@ -6,6 +6,12 @@ export class ElementWrapper extends Vdom {
         super()
         this.type = type
     }
+    renderVdom() {
+        this.$vchildren = this.children.map(child => {
+            return child.renderVdom()
+        })
+        return this
+    }
     [RENDER_TO_DOM](range) {
 
         this.$range = range
@@ -31,7 +37,7 @@ export class ElementWrapper extends Vdom {
             vchild[RENDER_TO_DOM](childRange)
         }
 
-        this.replaceConent()
+        this.replaceContent()
     }
 }
 
@@ -44,7 +50,7 @@ export class TextWrapper extends Vdom {
     [RENDER_TO_DOM](range) {
         this.$range = range
         this.$node = document.createTextNode(this.content)
-        this.replaceConent()
+        this.replaceContent()
     }
 }
 

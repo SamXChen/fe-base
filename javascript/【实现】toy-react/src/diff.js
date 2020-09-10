@@ -34,7 +34,11 @@ export function patch(oldVdom, newVdom) {
 }
 
 export function isSame(oldVdom, newVdom) {
+    
     if (oldVdom.type !== newVdom.type) {
+        return false
+    }
+    if (Object.keys(oldVdom.props).length > Object.keys(newVdom.props).length) {
         return false
     }
     for (let name in oldVdom.props) {
@@ -42,12 +46,8 @@ export function isSame(oldVdom, newVdom) {
             return false
         }
     }
-    if (Object.keys(oldVdom.props).length > Object.keys(newVdom.props).length) {
-        return false
-    }
-
     if (newVdom.type === '#text' && newVdom.content !== oldVdom.content) {
-        return
+        return false
     }
     return true
 }
