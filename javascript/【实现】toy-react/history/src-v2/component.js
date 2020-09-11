@@ -7,6 +7,7 @@ export class Component extends Vdom {
 
     constructor() {
         super()
+        this.__is__component_vdom__
     }
     renderVdom() {
         this.$vchildren = [this.render().renderVdom()]
@@ -68,6 +69,8 @@ function merge(oldState, newState) {
         if (oldState[key] === null || typeof oldState[key] !== 'object') {
             oldState[key] = newState[key]
         } else if (newState[key] === undefined || newState[key] === null || typeof newState[key] !== 'object') {
+            oldState[key] = newState[key]
+        } else if (typeof newState[key] === 'object' && newState[key] instanceof Array) {
             oldState[key] = newState[key]
         } else {
             merge(oldState[key], newState[key])

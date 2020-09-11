@@ -23,7 +23,7 @@ export function render(vdom, parentEl) {
     if (vdom === null || !vdom.renderVdom || !vdom[RENDER_TO_DOM]) {
         return
     }
-    // 重要：更新 vdom 的 vchildren
+    // 重要：自上而下，更新一次 vdom 的 vchildren，即构建完一整颗 vdom 树
     vdom.renderVdom()
 
     const range = document.createRange()

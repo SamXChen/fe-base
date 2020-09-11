@@ -22,11 +22,8 @@ export class Vdom {
     replaceContent() {
         if (this.$range === null) {
             return
-        }
-        const range = this.$range
-        const node = this.$node
-        
-        replaceRangeContent(range, node)
+        }        
+        replaceRangeContent(this.$range, this.$node)
     }
 }
 

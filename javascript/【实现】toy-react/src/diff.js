@@ -38,7 +38,10 @@ export function isSame(oldVdom, newVdom) {
     if (oldVdom.type !== newVdom.type) {
         return false
     }
-    if (Object.keys(oldVdom.props).length > Object.keys(newVdom.props).length) {
+    if (oldVdom.$vchildren.length !== newVdom.$vchildren.length) {
+        return false
+    }
+    if (Object.keys(oldVdom.props).length !== Object.keys(newVdom.props).length) {
         return false
     }
     for (let name in oldVdom.props) {
