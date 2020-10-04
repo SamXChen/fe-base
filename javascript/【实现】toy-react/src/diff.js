@@ -3,7 +3,26 @@ import { RENDER_TO_DOM } from './consts'
 
 export function patch(oldVdom, newVdom) {
 
+    // component diff
+    if (typeof newVdom.$type === 'function') {
+        if (oldVdom.$instance) {
+            newVdom.$instance = oldVdom.$instance
+            // update props and children
+            newVdom.$instance.bindVdom(newVdom, newVdom.children)
+            newVdom.$instance.props = newVdom.props
+
+            const childVdom = newVdom.$instance.render()
+            childVdom.$vchildren = childVdom.children
+            newVdom.$vchildren = [childVdom]
+        } else {
+            newVdom.renderVdom()
+        }
+    } else {
+        newVdom.$vchildren = newVdom.children
+    }
+
     if (!isSame(oldVdom, newVdom)) {
+        newVdom.renderVdom()
         newVdom[RENDER_TO_DOM](oldVdom.$range)
         return
     }
@@ -17,6 +36,7 @@ export function patch(oldVdom, newVdom) {
         return
     }
 
+    // @todo
     let tailRange = oldChildren[oldChildren.length - 1].$range
     for (let idx = 0; idx < newChildren.length; ++idx) {
         const newChild = newChildren[idx]
@@ -49,7 +69,7 @@ export function isSame(oldVdom, newVdom) {
             return false
         }
     }
-    if (newVdom.type === '#text' && newVdom.content !== oldVdom.content) {
+    if (newVdom.$type === '#text' && newVdom.content !== oldVdom.content) {
         return false
     }
     return true

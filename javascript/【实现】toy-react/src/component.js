@@ -2,35 +2,46 @@ import { Vdom } from './vdom'
 import { RENDER_TO_DOM } from './consts'
 import { patch } from './diff'
 
-
-export class Component extends Vdom {
-
+export class ComponentVdom extends Vdom {
+    
     constructor() {
         super()
-        this.__is__component_vdom__
+        this.$instance = null
     }
     renderVdom() {
-        this.$vchildren = [this.render().renderVdom()]
+        if (this.$instance === null) {
+            this.createInstance()
+        }
+        const instance = this.$instance
+        this.$vchildren = [instance.render().renderVdom()]
         return this
     }
+    createInstance() {
+        const type = this.$type
+        if (type === null) {
+            throw new Error(`Instance of ComponentVdom shouldn't be null`)
+        }
+        // 组件实例 与 vdom 双向绑定
+        this.$instance = new type(this.props)
+        // 将 vdom 的 props 与 children 赋值给 instance
+        this.$instance.bindVdom(this, this.children)
+    }
     [RENDER_TO_DOM](range) {
-        const prevRange = this.$range
         this.$range = range
+        this.$vchildren[0][RENDER_TO_DOM](range)
+    }
+}
 
-        if (prevRange === null) {
-            this.componentWillMount()
-        } else {
-            // componentWillUpdate
-        }
-        
-        const vdom = this.$vchildren[0]
-        vdom[RENDER_TO_DOM](range)
+export class Component {
 
-        if (prevRange === null) {
-            this.componentDidMount()
-        } else {
-            // componentDidUpdate
-        }
+    constructor(props) {
+        this.$vdom = null
+        this.props = props
+        this.children = []
+    }
+    bindVdom(vdom, children) {
+        this.$vdom = vdom
+        this.children = children
     }
     setState(newState) {
         if (this.state === null || typeof this.state !== 'object') {
@@ -42,26 +53,17 @@ export class Component extends Vdom {
         this.update()
     }
     update() {
-        const oldVdom = this.$vchildren[0]
-        this.renderVdom()
-        const newVdom = this.$vchildren[0]
+        if (this.$vdom === null) {
+            throw new Error(`vdom of Instance is null`)
+        }
         // @todo
-        // diff patch
+        const oldVdom = this.$vdom.$vchildren[0]
+
+        const newVdom = this.render()
+        newVdom.$vchildren = newVdom.children
         patch(oldVdom, newVdom)
+        this.$vdom.$vchildren = [newVdom]
     }
-    
-    // 组件生命周期 -- start
-    componentWillMount() {}
-    componentDidMount() {}
-
-    componentWillReceiveProps(nextProps) {}
-    shouldComponentUpdate(nextProps, nextState) {}
-
-    componentWillUpdate(nextProps, nextState) {}
-    componentDidUpdate(prevProps, prevState) {}
-
-    componentWillUnmount() {}
-    // 组件生命周期 -- end
 }
 
 function merge(oldState, newState) {

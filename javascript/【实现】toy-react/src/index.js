@@ -1,15 +1,15 @@
 import { RENDER_TO_DOM } from './consts'
 import { ElementWrapper, TextWrapper } from './elements'
-import { Component } from './component'
+import { Component, ComponentVdom } from './component'
 
 export function createElement(type, attributes, ...children) {
-
     let vdom
 
     if (typeof type === 'string') {
         vdom = new ElementWrapper(type)
     } else {
-        vdom = new type()
+        vdom = new ComponentVdom()
+        vdom.$type = type
     }
 
     for (let key in attributes) {

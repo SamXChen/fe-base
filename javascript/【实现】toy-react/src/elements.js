@@ -4,7 +4,7 @@ import { Vdom } from './vdom'
 export class ElementWrapper extends Vdom {
     constructor(type) {
         super()
-        this.type = type
+        this.$type = type
     }
     renderVdom() {
         this.$vchildren = this.children.map(child => {
@@ -16,7 +16,7 @@ export class ElementWrapper extends Vdom {
 
         this.$range = range
 
-        const node = document.createElement(this.type)
+        const node = document.createElement(this.$type)
         this.$node = node
 
         for (let name in this.props) {
@@ -44,7 +44,7 @@ export class ElementWrapper extends Vdom {
 export class TextWrapper extends Vdom {
     constructor(content) {
         super()
-        this.type = '#text'
+        this.$type = '#text'
         this.content = content
     }
     [RENDER_TO_DOM](range) {

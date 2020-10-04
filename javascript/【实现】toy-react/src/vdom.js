@@ -3,9 +3,14 @@ import { RENDER_TO_DOM } from './consts'
 export class Vdom {
     constructor() {
         this.props = Object.create(null)
-        this.children = []
-        this.$vchildren = []
+        this.$type = null
         this.$range = null
+
+        // vdom children
+        //// 初始 children
+        this.children = []
+        //// 实际 children
+        this.$vchildren = []        
     }
     setAttribute(name, value) {
         this.props[name] = value
