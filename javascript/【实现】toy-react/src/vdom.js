@@ -1,24 +1,24 @@
-import { RENDER_TO_DOM } from './consts'
+import { RENDER_TO_DOM, RENDER_V_CHILDREN } from './consts'
 
 export class Vdom {
     constructor() {
         this.props = Object.create(null)
         this.$type = null
         this.$range = null
-
-        // vdom children
-        //// 初始 children
-        this.children = []
-        //// 实际 children
         this.$vchildren = []        
     }
     setAttribute(name, value) {
         this.props[name] = value
     }
     appendChild(component) {
-        this.children.push(component)
+        let children
+        if (this.props['children'] === undefined) {
+            this.props['children'] = []
+        }
+        children = this.props['children']
+        children.push(component)
     }
-    renderVdom() {
+    [RENDER_V_CHILDREN]() {
         return this
     }
     [RENDER_TO_DOM]() {

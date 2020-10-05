@@ -1,52 +1,51 @@
-import { RENDER_TO_DOM } from './consts'
+import { RENDER_TO_DOM, RENDER_V_CHILDREN } from './consts'
 import { ElementWrapper, TextWrapper } from './elements'
 import { Component, ComponentVdom } from './component'
+import { buildReconciler, TASK_TYPE } from './reconciler'
 
-export function createElement(type, attributes, ...children) {
-    let vdom
-
-    if (typeof type === 'string') {
-        vdom = new ElementWrapper(type)
-    } else {
-        vdom = new ComponentVdom()
-        vdom.$type = type
+export function render(vdom, parentEl) {
+    
+    if (vdom === null || !vdom[RENDER_TO_DOM]) {
+        return
     }
 
-    for (let key in attributes) {
+    buildReconciler().pushTask({
+        type: TASK_TYPE.ROOT_MOUNT,
+        el: parentEl,
+        vdom: vdom,
+    })
+}
+
+export function createElement(type, attributes, ...children) {    
+    
+    const vdomClass = typeof type === 'string' ? ElementWrapper : ComponentVdom
+    const vdom = new vdomClass(type)
+
+    for (const key in attributes) {
         vdom.setAttribute(key, attributes[key])
     }
-    inserChildren(vdom, children)
+    for (const child of children) {
+        insertChild(vdom, child)
+    }
+
     return vdom    
 }
 
-export function render(vdom, parentEl) {
-    if (vdom === null || !vdom.renderVdom || !vdom[RENDER_TO_DOM]) {
+function insertChild(vdom, child) {
+    if (child === null) {
         return
     }
-    // 重要：自上而下，更新一次 vdom 的 vchildren，即构建完一整颗 vdom 树
-    vdom.renderVdom()
-
-    const range = document.createRange()
-    range.setStart(parentEl, parentEl.childNodes.length)
-    range.setEnd(parentEl, parentEl.childNodes.length)
-    range.deleteContents()
-    vdom[RENDER_TO_DOM](range)
-}
-
-function inserChildren(vdom, children) {
-    for (let child of children) {
-        if (child === null) {
-            continue
-        }
-        if (typeof child === 'string' || typeof child === 'number') {
-            child = new TextWrapper(child)
-        }
-        if (typeof child === 'object' && child instanceof Array) {
-            inserChildren(vdom, child)
-        } else {
-            vdom.appendChild(child)
-        }
+    if (typeof child === 'string' || typeof child === 'number') {
+        return vdom.appendChild(new TextWrapper(child))
     }
+    if (Array.isArray(child)) {
+        const children = child
+        for (const child of children) {
+            insertChild(vdom, child)
+        }
+        return
+    }
+    vdom.appendChild(child)
 }
 
 export { 

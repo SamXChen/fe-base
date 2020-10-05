@@ -1,20 +1,18 @@
 import { Vdom } from './vdom'
-import { RENDER_TO_DOM } from './consts'
-import { patch } from './diff'
+import { RENDER_TO_DOM, RENDER_V_CHILDREN } from './consts'
 
 export class ComponentVdom extends Vdom {
     
-    constructor() {
+    constructor(type) {
         super()
         this.$instance = null
+        this.$type = type
     }
-    renderVdom() {
+    [RENDER_V_CHILDREN]() {
         if (this.$instance === null) {
             this.createInstance()
         }
-        const instance = this.$instance
-        this.$vchildren = [instance.render().renderVdom()]
-        return this
+        this.$vchildren = [this.$instance.render()]
     }
     createInstance() {
         const type = this.$type
@@ -23,8 +21,7 @@ export class ComponentVdom extends Vdom {
         }
         // 组件实例 与 vdom 双向绑定
         this.$instance = new type(this.props)
-        // 将 vdom 的 props 与 children 赋值给 instance
-        this.$instance.bindVdom(this, this.children)
+        this.$instance.$vdom = this
     }
     [RENDER_TO_DOM](range) {
         this.$range = range
@@ -37,11 +34,6 @@ export class Component {
     constructor(props) {
         this.$vdom = null
         this.props = props
-        this.children = []
-    }
-    bindVdom(vdom, children) {
-        this.$vdom = vdom
-        this.children = children
     }
     setState(newState) {
         if (this.state === null || typeof this.state !== 'object') {
@@ -53,16 +45,10 @@ export class Component {
         this.update()
     }
     update() {
+        console.log('update')
         if (this.$vdom === null) {
             throw new Error(`vdom of Instance is null`)
         }
-        // @todo
-        const oldVdom = this.$vdom.$vchildren[0]
-
-        const newVdom = this.render()
-        newVdom.$vchildren = newVdom.children
-        patch(oldVdom, newVdom)
-        this.$vdom.$vchildren = [newVdom]
     }
 }
 

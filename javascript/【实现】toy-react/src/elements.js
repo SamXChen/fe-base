@@ -1,4 +1,4 @@
-import { RENDER_TO_DOM } from './consts'
+import { RENDER_TO_DOM, RENDER_V_CHILDREN } from './consts'
 import { Vdom } from './vdom'
 
 export class ElementWrapper extends Vdom {
@@ -6,11 +6,9 @@ export class ElementWrapper extends Vdom {
         super()
         this.$type = type
     }
-    renderVdom() {
-        this.$vchildren = this.children.map(child => {
-            return child.renderVdom()
-        })
-        return this
+    [RENDER_V_CHILDREN]() {
+        const { children = [] } = this.props
+        this.$vchildren = [...children]
     }
     [RENDER_TO_DOM](range) {
 
@@ -29,14 +27,6 @@ export class ElementWrapper extends Vdom {
                 node.setAttribute(exchangeAttribute(name), value)
             }
         }
-
-        for (let vchild of this.$vchildren) {
-            const childRange = document.createRange()
-            childRange.setStart(node, node.childNodes.length)
-            childRange.setEnd(node, node.childNodes.length)
-            vchild[RENDER_TO_DOM](childRange)
-        }
-
         this.replaceContent()
     }
 }
