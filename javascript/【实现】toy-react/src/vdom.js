@@ -21,8 +21,8 @@ export class Vdom {
     [RENDER_V_CHILDREN]() {
         return this
     }
-    [RENDER_TO_DOM]() {
-        throw new Error(`Pure Vdom shouldn't be rendered to DOM`)
+    [RENDER_TO_DOM](range) {
+        this.$range = range
     }
     replaceContent() {
         if (this.$range === null) {

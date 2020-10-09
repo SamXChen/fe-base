@@ -12,12 +12,16 @@ export class ElementWrapper extends Vdom {
     }
     [RENDER_TO_DOM](range) {
 
-        this.$range = range
+        super[RENDER_TO_DOM](range)
 
         const node = document.createElement(this.$type)
         this.$node = node
 
         for (let name in this.props) {
+
+            if (name === 'children') {
+                continue
+            }
 
             const value = this.props[name]
 
@@ -38,7 +42,7 @@ export class TextWrapper extends Vdom {
         this.content = content
     }
     [RENDER_TO_DOM](range) {
-        this.$range = range
+        super[RENDER_TO_DOM](range)
         this.$node = document.createTextNode(this.content)
         this.replaceContent()
     }

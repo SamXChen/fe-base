@@ -1,5 +1,6 @@
 import { Vdom } from './vdom'
 import { RENDER_TO_DOM, RENDER_V_CHILDREN } from './consts'
+import { buildReconciler, TASK_TYPE } from './reconciler'
 
 export class ComponentVdom extends Vdom {
     
@@ -24,7 +25,7 @@ export class ComponentVdom extends Vdom {
         this.$instance.$vdom = this
     }
     [RENDER_TO_DOM](range) {
-        this.$range = range
+        super[RENDER_TO_DOM](range)
         this.$vchildren[0][RENDER_TO_DOM](range)
     }
 }
@@ -45,10 +46,23 @@ export class Component {
         this.update()
     }
     update() {
-        console.log('update')
         if (this.$vdom === null) {
             throw new Error(`vdom of Instance is null`)
         }
+
+        const oldVdom = this.$vdom.$vchildren[0]
+        const newVdom = this.render()
+        console.log('render in update')
+        newVdom.$parent = this.$vdom
+
+        // replace new vdom to vdom tree
+        this.$vdom.$vchildren[0] = newVdom
+
+        buildReconciler().pushTask({
+            type: TASK_TYPE.PATCH_VDOM,
+            oldVdom,
+            newVdom,
+        })
     }
 }
 

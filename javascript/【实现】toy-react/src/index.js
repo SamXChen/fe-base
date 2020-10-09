@@ -1,4 +1,4 @@
-import { RENDER_TO_DOM, RENDER_V_CHILDREN } from './consts'
+import { RENDER_TO_DOM } from './consts'
 import { ElementWrapper, TextWrapper } from './elements'
 import { Component, ComponentVdom } from './component'
 import { buildReconciler, TASK_TYPE } from './reconciler'
